@@ -1,0 +1,78 @@
+/* Una misma superficie de impresión para todo el recorrido. */
+:root{
+  --surface:#0b0b0b;
+  --grain-opacity:.115;
+  --grain-texture:url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22180%22%20height%3D%22180%22%20viewBox%3D%220%200%20180%20180%22%3E%0A%20%20%3Cfilter%20id%3D%22grain%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%0A%20%20%20%20%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.92%22%20numOctaves%3D%223%22%20stitchTiles%3D%22stitch%22%2F%3E%0A%20%20%20%20%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%0A%20%20%3C%2Ffilter%3E%0A%20%20%3Cpath%20fill%3D%22%23fff%22%20filter%3D%22url%28%23grain%29%22%20d%3D%22M0%200h180v180H0z%22%2F%3E%0A%3C%2Fsvg%3E%0A');
+  --edge-shadow:radial-gradient(ellipse at 50% 46%,transparent 35%,#03030328 66%,#03030390 100%);
+}
+body,main,footer,.hero,.share,.portrait{background-color:var(--surface)}
+body{isolation:isolate}
+/* Capas continuas: no se reinician al cambiar de sección. */
+body::before,dialog::after{
+  content:"";position:fixed;inset:-180px;z-index:80;pointer-events:none;
+  background-image:var(--grain-texture);background-size:180px 180px;
+  opacity:var(--grain-opacity);mix-blend-mode:screen;
+  animation:printed-grain .65s steps(1,end) infinite;
+  will-change:transform;
+}
+body::after,dialog::before{
+  content:"";position:fixed;inset:0;z-index:79;pointer-events:none;
+  background:var(--edge-shadow);
+}
+@keyframes printed-grain{
+  0%,100%{transform:translate(0,0)}
+  16%{transform:translate(-31px,47px)}
+  32%{transform:translate(56px,-23px)}
+  48%{transform:translate(-71px,-59px)}
+  64%{transform:translate(23px,81px)}
+  80%{transform:translate(68px,31px)}
+}
+.header{background:#0b0b0be8;border-bottom-color:#ffffff14;backdrop-filter:blur(12px)}
+.hero-image{
+  filter:grayscale(1) contrast(1.08) brightness(.9);
+  mask-image:linear-gradient(#000 0%,#000 65%,#000c 82%,transparent 100%);
+  -webkit-mask-image:linear-gradient(#000 0%,#000 65%,#000c 82%,transparent 100%);
+}
+.hero::after{background:linear-gradient(90deg,#0007,transparent 70%);opacity:1}
+.hero::before,.share::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:radial-gradient(ellipse at 50% 48%,transparent 20%,#0b0b0b55 70%,#0b0b0bcc 100%);
+}
+.share{background-image:radial-gradient(ellipse at 50% 58%,#25252588,transparent 63%)}
+.share::before{z-index:0}
+.share-grid,.scroll-bridge{position:relative;z-index:1}
+.scroll-bridge{background:radial-gradient(ellipse,#32323235,transparent 65%)}
+.mouth-art img{
+  filter:grayscale(1) contrast(1.15) brightness(.85);
+  mask-image:radial-gradient(ellipse at center,#000 25%,#000e 45%,transparent 74%);
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 25%,#000e 45%,transparent 74%);
+}
+.portrait{filter:none;background:#0b0b0b}
+.portrait-haze{
+  background:radial-gradient(ellipse at 47% 48%,#a2a2a2 0%,#767676 18%,#3d3d3d 42%,#171717 65%,#0b0b0b 85%);
+  mask-image:linear-gradient(transparent,#000 18%,#000 78%,transparent);
+  -webkit-mask-image:linear-gradient(transparent,#000 18%,#000 78%,transparent);
+}
+.portrait::before{background:radial-gradient(ellipse at 48% 48%,transparent 12%,#0b0b0b55 48%,#0b0b0bdd 78%,#0b0b0b 100%);box-shadow:inset 0 0 110px 35px #0b0b0b}
+.portrait::after{content:none}
+.portrait h2{color:#c9c9c9}.portrait .section-heading{color:#d0d0d0}
+
+.section-footer{border-top-color:#ffffff19}
+.share .section-footer{padding-top:28px;padding-bottom:40px}
+footer{border-top:0}
+dialog,dialog.camera-mode{background-color:var(--surface)}
+dialog::before{background:radial-gradient(ellipse,transparent 45%,#0006 100%)}
+dialog::after{--grain-opacity:.09}
+@media(max-width:760px){
+  .portrait-haze{background:radial-gradient(ellipse at 47% 43%,#959595 0%,#4c4c4c 30%,#191919 59%,#0b0b0b 82%)}
+  .portrait::before{box-shadow:inset 0 0 75px 15px #0b0b0b}
+  :root{--edge-shadow:radial-gradient(ellipse at 50% 46%,transparent 35%,#03030318 66%,#03030370 100%)}
+}
+@media(prefers-reduced-motion:reduce){body::before,dialog::after{animation:none;will-change:auto}}
+@media print{body::before,body::after,dialog::before,dialog::after{display:none}}
+
+
+/* Fondo original de Cómo te ves, integrado a la superficie común. */
+.portrait-background{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 43%;opacity:.95;filter:saturate(0) brightness(.8);mask-image:linear-gradient(transparent 0%,#000 13%,#000 85%,transparent 100%);-webkit-mask-image:linear-gradient(transparent 0%,#000 13%,#000 85%,transparent 100%)}
+.portrait::before{background:radial-gradient(ellipse at 50% 45%,transparent 20%,#0b0b0b33 50%,#0b0b0bc9 85%,#0b0b0b 100%);box-shadow:inset 0 0 90px 15px #0b0b0b}
+@media(max-width:760px){.portrait-background{object-position:50% 35%}.portrait::before{box-shadow:inset 0 0 60px 10px #0b0b0b}}

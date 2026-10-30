@@ -1,0 +1,9 @@
+{
+  "name": "el-odio-en-frances",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Experiencia visual con retrato en vivo y red nodal de El odio en francés.",
+  "scripts": {
+    "start": "node server.cjs"
+  }
+}
